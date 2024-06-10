@@ -8,6 +8,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
+  "bin":{
+    "generate": "./bin/generate.js"
+  },
   "keywords": [
     "react",
     "table"
@@ -34,9 +37,12 @@
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
+    "body-scroll-lock": "^4.0.0-beta.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "^5.4.5",
-    "body-scroll-lock": "^4.0.0-beta.0"
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "arg": "^5.0.2"
   }
 }

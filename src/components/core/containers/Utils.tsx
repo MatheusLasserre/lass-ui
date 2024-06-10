@@ -2,7 +2,7 @@ import { forwardRef, HTMLAttributes, useEffect, useState } from 'react'
 import Style from './Utils.module.css'
 import { clx } from '../../../utils/style'
 import { LoadingZero } from '../utils/Loading'
-import { CSS_VARS, CSS_VARS_OPTIONS } from '../colors'
+import { CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
 
 type HideComponentProps = {
   children: React.ReactNode

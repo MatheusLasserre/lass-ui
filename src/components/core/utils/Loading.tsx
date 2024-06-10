@@ -1,5 +1,5 @@
 import React from 'react'
-import { CSS_VARS_OPTIONS } from '../colors'
+import { CSS_VARS_OPTIONS } from '../../../utils/cssVars'
 
 type Error = {
   errorMessage?: string | undefined | null

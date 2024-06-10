@@ -4,7 +4,7 @@ import { AngleUpIcon, CrossIcon, EyeIcon, UpArrowIcon } from '../../assets/Icons
 import { FlexRow, HideComponent } from '../containers/Utils'
 import useTarget from '../../../hooks/useTarget'
 import { Text } from '../text/Text'
-import { CSS_VARS_OPTIONS } from '../colors'
+import { CSS_VARS_OPTIONS } from '../../../utils/cssVars'
 import { clx } from '../../../utils/style'
 
 type InputProps = {

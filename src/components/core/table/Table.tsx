@@ -1,6 +1,6 @@
 import { FlexColumn } from '../containers/Utils'
 import Style from './Table.module.css'
-import { CSS_VARS, CSS_VARS_OPTIONS } from '../colors'
+import { CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
 import { Prettify } from '../../../types/utils'
 import React, { useEffect, useState } from 'react'
 

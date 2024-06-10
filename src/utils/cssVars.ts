@@ -1,19 +1,61 @@
-/**
- * We gonna have at least:
- * 1: Brand Colors
- *  1.1: Buttons, Links, Icons, Navigation.
- * Comment: e.g Facebook Blue
- * 2: Supporting Colors
- * 1.1: Errors, Confirmation, Warnings, Information
- * Comment: Few Places that you need to draw attention to. Used less often than Brand Colors.
- * 3: Neutral Colors
- * 3.1: Background, Text, Borders, Secondary Buttons.
- * Comment: Used for the majority of the design.
- *
- * Step-by-Step: https://www.figma.com/design/JpbVaPfUUqtQu0GAEbPRmq/Color-tester?node-id=0-1&t=guEZr13oTFknO53B-0
- */
-
 export const CSS_VARS = {
+  'GRAY1': 'var(--GRAY1)',
+  'GRAY1-10': 'var(--GRAY1-10)',
+  'GRAY1-20': 'var(--GRAY1-20)',
+  'GRAY1-30': 'var(--GRAY1-30)',
+  'GRAY1-40': 'var(--GRAY1-40)',
+  'GRAY1-50': 'var(--GRAY1-50)',
+  'GRAY1-60': 'var(--GRAY1-60)',
+  'GRAY1-70': 'var(--GRAY1-70)',
+  'GRAY1-80': 'var(--GRAY1-80)',
+  'GRAY1-90': 'var(--GRAY1-90)',
+  'GRAY2': 'var(--GRAY2)',
+  'GRAY3': 'var(--GRAY3)',
+  'GRAY4': 'var(--GRAY4)',
+  'GRAY5': 'var(--GRAY5)',
+  'GRAY6': 'var(--GRAY6)',
+  'GRAY7': 'var(--GRAY7)',
+  'BROWN1': 'var(--BROWN1)',
+  'BROWN2': 'var(--BROWN2)',
+  'GREEN1': 'var(--GREEN1)',
+  'GREEN2': 'var(--GREEN2)',
+  'GREEN3': 'var(--GREEN3)',
+  'GREEN4': 'var(--GREEN4)',
+  'WHITE1': 'var(--WHITE1)',
+  'WHITE2': 'var(--WHITE2)',
+  'BLACK1': 'var(--BLACK1)',
+  'BLACK1-10': 'var(--BLACK1-10)',
+  'BLACK1-20': 'var(--BLACK1-20)',
+  'BLACK1-30': 'var(--BLACK1-30)',
+  'BLACK1-40': 'var(--BLACK1-40)',
+  'BLACK1-50': 'var(--BLACK1-50)',
+  'BLACK1-60': 'var(--BLACK1-60)',
+  'BLACK1-70': 'var(--BLACK1-70)',
+  'BLACK1-80': 'var(--BLACK1-80)',
+  'BLACK1-90': 'var(--BLACK1-90)',
+  'BLUE1': 'var(--BLUE1)',
+  'BLUE2': 'var(--BLUE2)',
+  'BLUE3': 'var(--BLUE3)',
+  'BLUE4': 'var(--BLUE4)',
+  'RED1': 'var(--RED1)',
+  'RED1-30': 'var(--RED1-30)',
+  'RED1-40': 'var(--RED1-40)',
+  'RED1-50': 'var(--RED1-50)',
+  'RED1-60': 'var(--RED1-60)',
+  'RED1-70': 'var(--RED1-70)',
+  'RED1-80': 'var(--RED1-80)',
+  'RED1-90': 'var(--RED1-90)',
+  'N-PURPLE1': 'var(--N-PURPLE1)',
+  'N-GRAY1': 'var(--N-GRAY1)',
+  'TRANSITION-DEFAULT': 'var(--TRANSITION-DEFAULT)',
+  'TRANSITION-DEFAULT-TEXT': 'var(--TRANSITION-DEFAULT-TEXT)',
+  'TRANSITION-DEFAULT-BORDER': 'var(--TRANSITION-DEFAULT-BORDER)',
+  'TRANSITION-SHADOW': 'var(--TRANSITION-SHADOW)',
+  'SHADOW': 'var(--SHADOW)',
+  'SHADOW-MD': 'var(--SHADOW-MD)',
+  'SHADOW-LG': 'var(--SHADOW-LG)',
+  'SHADOW-INNER': 'var(--SHADOW-INNER)',
+  'BEZIER': 'var(--BEZIER)',
   'primary-100': 'var(--primary-100)',
   'primary-200': 'var(--primary-200)',
   'primary-300': 'var(--primary-300)',
@@ -69,7 +111,6 @@ export const CSS_VARS = {
   'white-30': 'var(--white-30)',
   'white-20': 'var(--white-20)',
   'white-10': 'var(--white-10)',
-  'transparent': 'transparent',
+  'white-05': 'var(--white-05)',
 }
-
 export type CSS_VARS_OPTIONS = keyof typeof CSS_VARS

@@ -14,7 +14,7 @@ tl;dr
 It's  a WIP, so the setup for you to bring your own CSS variables is not yet implemented. You would have to create variables with the same name as the ones in colors.ts.
 
 ## GOALS:
-#### - Provide a easy way to bring your own palette of colors and change most of the visuals. E.G: colors, border radius, font size, etc.
+#### - Provide an easy way to bring your own palette of colors and change most of the visuals. E.G: colors, border radius, font size, etc.
 #### - Provide a way to easily toggle between dark and light mode.
 #### - Bring the boredom of making Tables, Forms, Inputs, etc. as close do zero as possible.
 #### - Make so you can tweak everything by some prop or config, idk, so you don't have to fear being unable to do something because of the library.

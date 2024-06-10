@@ -1,5 +1,5 @@
 import React from 'react'
-import { CSS_VARS, CSS_VARS_OPTIONS } from '../colors'
+import { CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
 type FontFamilyOptions = 'Inter' | 'Lato' | 'Jomhuria'
 type TextProps = {
   children: React.ReactNode
