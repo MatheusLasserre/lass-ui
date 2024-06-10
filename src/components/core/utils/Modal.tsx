@@ -1,7 +1,9 @@
-import { forwardRef } from 'react'
+import { forwardRef, useEffect } from 'react'
 import Style from './Modal.module.css'
 import { FlexColumn, IconBackgroundNormalizer } from '../containers/Utils'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+import { CSS_VARS_OPTIONS } from '~/utils/cssVars'
+import { clx } from '../../../utils/style'
 
 export const ModalHelper: React.FC<{
   children: React.ReactNode
@@ -41,18 +43,58 @@ type ContextMenuProps = {
 
 export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
   ({ children, visible, close, x, y }, ref) => {
+    useEffect(() => {
+      if (document) {
+        addHoverStyle()
+      }
+      return () => {
+        if (document) {
+          removeHoverStyle()
+        }
+      }
+    }, [])
+    const addHoverStyle = () => {
+      const styleEl = document.createElement('style')
+      styleEl.id = 'lassui-contextMenuItem-hover'
+      document.head.appendChild(styleEl)
+      const styleSheet = styleEl.sheet
+      styleSheet?.insertRule(
+        `.lassui-contextMenuItem:hover {
+            background-color: #017D73B2;
+          }
+          `,
+        0,
+      )
+      styleSheet?.insertRule(
+        `.lassui-contextMenuItem:hover > p {
+          color: #fff !important;
+        }`,
+        0,
+      )
+    }
+    const removeHoverStyle = () => {
+      const styleEl = document.getElementById('lassui-contextMenuItem-hover')
+      if (styleEl) {
+        styleEl.remove()
+      }
+    }
     visible ? disableBodyScroll(document.body) : enableBodyScroll(document.body)
     if (!visible) return null
     const abc = <p></p>
     return (
       <FlexColumn
         ref={ref}
-        className={Style.contextMenuBox}
         styles={{
           top: y + 'px',
           left: x + 'px',
           padding: '4px 0',
           width: 'fit-content',
+          position: 'fixed',
+          zIndex: '100',
+          backgroundColor: '#fff',
+          borderRadius: '8px',
+          boxShadow: '0px 0px 10px 0px rgba(255, 255, 255, 0.05)',
+          border: '2px solid #DFDFDF',
         }}
       >
         {children}
@@ -66,22 +108,58 @@ export const ContextMenuItem: React.FC<{
   text: string
   icon: React.ReactNode
   padding?: string
-}> = ({ onClick, text, icon, padding }) => {
+  backgroundColor: CSS_VARS_OPTIONS
+  textColor: CSS_VARS_OPTIONS
+}> = ({ onClick, text, icon, padding, backgroundColor, textColor }) => {
   return (
-    <div className={Style.contextMenuItem} onClick={onClick}>
+    <div
+      className={clx('lassui-contextMenuItem')}
+      style={{
+        padding: '4px 20px',
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: '10px',
+        width: '100%',
+      }}
+      onClick={onClick}
+    >
       <IconBackgroundNormalizer
         width='16px'
-        backgroundColor={'neutral-900'}
-        color='neutral-100'
+        backgroundColor={backgroundColor}
+        color={textColor}
         padding={padding}
       >
         {icon}
       </IconBackgroundNormalizer>
-      <p>{text}</p>
+      <p
+        style={{
+          fontSize: '12px',
+          lineHeight: '16px',
+          color: textColor,
+          fontWeight: '400',
+          fontFamily: 'Inter',
+          textAlign: 'left',
+          margin: 0,
+        }}
+      >
+        {text}
+      </p>
     </div>
   )
 }
 
 export const ContextMenuDivider: React.FC = () => {
-  return <div className={Style.contextMenuDivider}></div>
+  return (
+    <div
+      style={{
+        backgroundColor: '#DFDFDF',
+        width: '100%',
+        margin: 0,
+        height: 1,
+      }}
+    ></div>
+  )
 }

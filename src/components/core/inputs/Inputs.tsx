@@ -4,8 +4,9 @@ import { AngleUpIcon, CrossIcon, EyeIcon, UpArrowIcon } from '../../assets/Icons
 import { FlexRow, HideComponent } from '../containers/Utils'
 import useTarget from '../../../hooks/useTarget'
 import { Text } from '../text/Text'
-import { CSS_VARS_OPTIONS } from '../../../utils/cssVars'
+import { CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
 import { clx } from '../../../utils/style'
+import { usePseudoEl } from '../../../hooks/usePseudoEl'
 
 type InputProps = {
   type?: InputHTMLAttributes<HTMLInputElement>['type']
@@ -28,7 +29,18 @@ export const CLabel: React.FC<{
   children?: React.ReactNode
 }> = ({ label, className, children }) => {
   return (
-    <label className={Style.label + ' ' + className}>
+    <label
+      className={className}
+      style={{
+        fontSize: '12px',
+        fontWeight: '600',
+        color: CSS_VARS['neutral-100'],
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+        width: '100%',
+      }}
+    >
       {label}
       {children}
     </label>
@@ -69,6 +81,13 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
           disabled={disabled}
         />
       )
+
+    usePseudoEl('lassui-CText', [
+      '.lassui-CText::placeholder {color: var(--white-100);}',
+      '.lassui-CText:focus {outline: 1px solid var(--neutral-100);outline-offset: -1px;margin: auto;}',
+      '.lassui-CText:disabled {background-color: var(--neutral-300);color: var(--neutral-500);cursor: not-allowed;}',
+    ])
+
     return (
       <input
         type={type}
@@ -78,11 +97,24 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
         placeholder={placeholder}
         maxLength={maxLength}
         name={name}
-        className={Style.textInput + ' ' + className}
+        className={'lassui-CText' + ' ' + className}
         id={id}
         onKeyDown={onKeyDown}
         ref={ref}
         disabled={disabled}
+        style={{
+          width: '100%',
+          paddingLeft: '30px',
+          paddingRight: '30px',
+          height: '50px',
+          borderRadius: '8px',
+          borderStyle: 'none',
+          backgroundColor: CSS_VARS['neutral-100'],
+          fontSize: '18px',
+          fontWeight: '500',
+          color: CSS_VARS['white-100'],
+          margin: 'auto',
+        }}
       />
     )
   },
@@ -94,6 +126,11 @@ export const CPassword = forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false)
+    usePseudoEl('lassui-CText', [
+      '.lassui-CText::placeholder {color: var(--white-100);}',
+      '.lassui-CText:focus {outline: 1px solid var(--neutral-100);outline-offset: -1px;margin: auto;}',
+      '.lassui-CText:disabled {background-color: var(--neutral-300);color: var(--neutral-500);cursor: not-allowed;}',
+    ])
     return (
       <div className={Style.passwordBox}>
         <input
@@ -105,7 +142,20 @@ export const CPassword = forwardRef<HTMLInputElement, InputProps>(
           maxLength={maxLength}
           name={name}
           id={id}
-          className={Style.textInput + ' ' + className}
+          className={'lassui-CText' + ' ' + className}
+          style={{
+            width: '100%',
+            paddingLeft: '30px',
+            paddingRight: '30px',
+            height: '50px',
+            borderRadius: '8px',
+            borderStyle: 'none',
+            backgroundColor: CSS_VARS['neutral-100'],
+            fontSize: '18px',
+            fontWeight: '500',
+            color: CSS_VARS['white-100'],
+            margin: 'auto',
+          }}
         />
         <EyeIcon showPassword={showPassword} setShowPassword={setShowPassword} />
       </div>
@@ -115,7 +165,7 @@ export const CPassword = forwardRef<HTMLInputElement, InputProps>(
 
 export const CLText: React.FC<
   InputProps & {
-    label?: string
+    label: string
     labelClassName?: string
   }
 > = ({
@@ -134,7 +184,7 @@ export const CLText: React.FC<
   onKeyDown,
 }) => {
   return (
-    <label className={labelClassName || Style.label}>
+    <CLabel label={label} className={labelClassName}>
       {label}
       <CText
         type={type}
@@ -149,7 +199,7 @@ export const CLText: React.FC<
         disabled={disabled}
         onKeyDown={onKeyDown}
       />
-    </label>
+    </CLabel>
   )
 }
 

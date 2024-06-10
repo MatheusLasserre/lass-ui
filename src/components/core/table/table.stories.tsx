@@ -5,7 +5,7 @@ import '../../../styles/globals.css'
 import { FormatNumberMask } from '../../../utils/formating/numbers'
 
 const meta: Meta<typeof CTable> = {
-  title: 'Table/Core',
+  title: 'Core/Table',
   component: CTable,
 }
 

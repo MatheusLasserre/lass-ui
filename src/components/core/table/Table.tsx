@@ -37,8 +37,8 @@ export const CTable: React.FC<CTableProps> = ({
   rowHeight = '35px',
   nextPage,
 }) => {
-  const textColor = color || 'white-90'
-  const linkColorText = linkColor || ('secondary-blue-200' satisfies CSS_VARS_OPTIONS)
+  const textColor = color || 'neutral-100'
+  const linkColorText = linkColor || ('neutral-100' satisfies CSS_VARS_OPTIONS)
   const dataKeys = header.map((item) => item.dataKey)
   const headerLabels = header.map((item) => item.label)
   const dataKeysLength = dataKeys.length

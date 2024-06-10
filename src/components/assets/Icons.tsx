@@ -1,4 +1,4 @@
-import { CSS_VARS, CSS_VARS_OPTIONS } from '../core/colors'
+import { CSS_VARS, CSS_VARS_OPTIONS } from '../../utils/cssVars'
 
 type IconProps = {
   width?: number

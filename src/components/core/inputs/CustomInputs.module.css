@@ -874,3 +874,24 @@
     cursor: pointer;
     color: var(--white-90);
 }
+
+/* Currency */
+
+.currencyBeforeInput {
+    padding-left: 34px;
+}
+
+.currencyBefore {
+    position: relative;
+}
+
+.currencyBefore::after {
+    content: "R$";
+    display: inline;
+    position: absolute;
+    left: 8px;
+    top: 38px;
+    font-size: 16px;
+    color: var(--white-90);
+    font-weight: 500;
+}
