@@ -17,6 +17,7 @@ export const CLTextInput: Story = {
   args: {
     type: 'password',
     label: 'Label',
+
   },
 }
 
