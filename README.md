@@ -6,10 +6,10 @@ tl;dr
 
 #### - InteliSense for CSS variables
 #### - Basic styling as prop for most components
-#### - Named DIVs for fast structure. e.g: ```jsx <FlexRow />```, ```jsx <FlexColumn />```
-#### - Custom Utility Components. e.g: ```jsx <Loading />```, ```jsx <ModalHelper />```
-#### - Custom Input Components. e.g: ```jsx <CurrencyInput />```, ```jsx <SelectIntCustom />```, ```jsx <SelectIntCards />```, ```jsx <SelectIntFromQuery />```, ```jsx <SelectFromRange />```
-#### - Custom Table Component. e.g: ```jsx <CTable />``` (Yes, only one and you'll have a table! :O)
+#### - Named DIVs for fast structure. e.g: `<FlexRow />`, `<FlexColumn />`
+#### - Custom Utility Components. e.g: `<Loading />`, `<ModalHelper />`
+#### - Custom Input Components. e.g: `<CurrencyInput />`, `<SelectIntCustom />`, `<SelectIntCards />`, `<SelectIntFromQuery />`, `<SelectFromRange />`
+#### - Custom Table Component. e.g: `<CTable />` (Yes, only one and you'll have a table! :O)
 
 It's  a WIP, so the setup for you to bring your own CSS variables is not yet implemented. You would have to create variables with the same name as the ones in colors.ts.
 
