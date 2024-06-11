@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { CTable } from './Table'
 import React from 'react'
-import '../../../styles/globals.css'
 import { FormatNumberMask } from '../../../utils/formating/numbers'
+import { EditIcon } from '../../../components/assets/Icons'
 
 const meta: Meta<typeof CTable> = {
   title: 'Core/Table',
@@ -107,6 +107,10 @@ const formats = [
   {
     dataKey: 'balance',
     format: (value: number) => FormatNumberMask(value, 'R$'),
+  },
+  {
+    dataKey: 'status',
+    format: () => <EditIcon onClick={() =>{}}/>,
   },
 ]
 

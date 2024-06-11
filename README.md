@@ -18,3 +18,7 @@ It's  a WIP, so the setup for you to bring your own CSS variables is not yet imp
 #### - Provide a way to easily toggle between dark and light mode.
 #### - Bring the boredom of making Tables, Forms, Inputs, etc. as close do zero as possible.
 #### - Make so you can tweak everything by some prop or config, idk, so you don't have to fear being unable to do something because of the library.
+
+Reminders(for myself):
+- Make it so it's easily replaceable in the future. Without lock-in.
+- Make a lazy script that will include generated CSS variables. 

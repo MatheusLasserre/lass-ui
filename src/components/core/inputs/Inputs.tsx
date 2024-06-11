@@ -1,6 +1,5 @@
-import Style from './Inputs.module.css'
 import { ClassAttributes, forwardRef, InputHTMLAttributes, useState } from 'react'
-import { AngleUpIcon, CrossIcon, EyeIcon, UpArrowIcon } from '../../assets/Icons'
+import { CrossIcon, EyeIcon } from '../../assets/Icons'
 import { FlexRow, HideComponent } from '../containers/Utils'
 import useTarget from '../../../hooks/useTarget'
 import { Text } from '../text/Text'
@@ -34,7 +33,7 @@ export const CLabel: React.FC<{
       style={{
         fontSize: '12px',
         fontWeight: '600',
-        color: CSS_VARS['neutral-100'],
+        color: CSS_VARS['white-90'],
         display: 'flex',
         flexDirection: 'column',
         gap: '8px',
@@ -47,7 +46,9 @@ export const CLabel: React.FC<{
   )
 }
 
-export const CText = forwardRef<HTMLInputElement, InputProps>(
+export const CText: React.ForwardRefExoticComponent<
+  Omit<InputProps, 'ref'> & React.RefAttributes<HTMLInputElement>
+> = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       type,
@@ -83,9 +84,9 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
       )
 
     usePseudoEl('lassui-CText', [
-      '.lassui-CText::placeholder {color: var(--white-100);}',
-      '.lassui-CText:focus {outline: 1px solid var(--neutral-100);outline-offset: -1px;margin: auto;}',
-      '.lassui-CText:disabled {background-color: var(--neutral-300);color: var(--neutral-500);cursor: not-allowed;}',
+      `.lassui-CText::placeholder {color: ${CSS_VARS['white-30']};}`,
+      `.lassui-CText:focus {outline: 1px solid ${CSS_VARS['secondary-orange-200']};outline-offset: -1px;margin: auto;}`,
+      `.lassui-CText:disabled {background-color: ${CSS_VARS['neutral-300']};color: ${CSS_VARS['neutral-500']};cursor: not-allowed;}`,
     ])
 
     return (
@@ -109,10 +110,10 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
           height: '50px',
           borderRadius: '8px',
           borderStyle: 'none',
-          backgroundColor: CSS_VARS['neutral-100'],
+          backgroundColor: CSS_VARS['neutral-500'],
           fontSize: '18px',
           fontWeight: '500',
-          color: CSS_VARS['white-100'],
+          color: CSS_VARS['white-90'],
           margin: 'auto',
         }}
       />
@@ -120,19 +121,27 @@ export const CText = forwardRef<HTMLInputElement, InputProps>(
   },
 )
 
-export const CPassword = forwardRef<HTMLInputElement, InputProps>(
+export const CPassword: React.ForwardRefExoticComponent<
+  Omit<InputProps, 'ref'> & React.RefAttributes<HTMLInputElement>
+> = forwardRef<HTMLInputElement, InputProps>(
   (
     { type, onChange, placeholder, required, value, className, maxLength, name, id, onKeyDown },
     ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false)
     usePseudoEl('lassui-CText', [
-      '.lassui-CText::placeholder {color: var(--white-100);}',
-      '.lassui-CText:focus {outline: 1px solid var(--neutral-100);outline-offset: -1px;margin: auto;}',
-      '.lassui-CText:disabled {background-color: var(--neutral-300);color: var(--neutral-500);cursor: not-allowed;}',
+      `.lassui-CText::placeholder {color: ${CSS_VARS['white-30']};}`,
+      `.lassui-CText:focus {outline: 1px solid ${CSS_VARS['secondary-orange-200']};outline-offset: -1px;margin: auto;}`,
+      `.lassui-CText:disabled {background-color: ${CSS_VARS['neutral-300']};color: ${CSS_VARS['neutral-500']};cursor: not-allowed;}`,
     ])
     return (
-      <div className={Style.passwordBox}>
+      <div
+        style={{
+          width: '100%',
+          position: 'relative',
+          display: 'flex',
+        }}
+      >
         <input
           type={showPassword ? 'text' : 'password'}
           value={value}
@@ -150,10 +159,10 @@ export const CPassword = forwardRef<HTMLInputElement, InputProps>(
             height: '50px',
             borderRadius: '8px',
             borderStyle: 'none',
-            backgroundColor: CSS_VARS['neutral-100'],
+            backgroundColor: CSS_VARS['neutral-500'],
             fontSize: '18px',
             fontWeight: '500',
-            color: CSS_VARS['white-100'],
+            color: CSS_VARS['white-90'],
             margin: 'auto',
           }}
         />
@@ -206,30 +215,45 @@ export const CLText: React.FC<
 export const CCheckbox: React.FC<{
   checked: boolean
   setChecked: React.Dispatch<boolean>
-  className?: string
-}> = ({ checked, setChecked, className }) => {
-  return (
-    <input
-      type='checkbox'
-      checked={checked}
-      onChange={(e) => setChecked(e.currentTarget.checked)}
-      className={clx(Style.checkbox, className, `${checked ? Style.checked : ''}`)}
-    />
-  )
-}
-
-export const CLCheckbox: React.FC<{
-  checked: boolean
-  setChecked: React.Dispatch<boolean>
-  label: string
-  labelClassName?: string
   checkBoxClassName?: string
-}> = ({ checked, setChecked, label, labelClassName, checkBoxClassName }) => {
+}> = ({ checked, setChecked, checkBoxClassName }) => {
+  usePseudoEl('lassui-CLCheckbox', [
+    '.lassui-CLCheckbox > svg {display: none;}',
+    `.lassui-CLCheckbox[data-checked="true"] {background-color: ${CSS_VARS['primary-500']};border: none;border-radius: 4px;width: 16px;height: 16px;display: flex;align-items: center;justify-content: center;}`,
+    '.lassui-CLCheckbox[data-checked="true"] > svg {display: block;}',
+  ])
   return (
-    <div className={Style.checkBoxContainer}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        width: '100%',
+        margin: 'auto',
+        textAlign: 'center',
+      }}
+    >
       <div
         onClick={() => setChecked(!checked)}
-        className={clx(Style.checkbox, checkBoxClassName, `${checked ? Style.checked : ''}`)}
+        className={clx(
+          'lassui-CLCheckbox',
+          checkBoxClassName,
+          `${checked ? 'data-checked="true"' : ''}`,
+        )}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          marginTop: '8px',
+          marginBottom: '8px',
+          borderRadius: '4px',
+          width: '16px',
+          height: '16px',
+          border: `1px solid ${CSS_VARS['white-90']}`,
+          cursor: 'pointer',
+        }}
+        data-checked={checked}
       >
         <svg width='9' height='6' viewBox='0 0 11 8' fill='none' xmlns='http://www.w3.org/2000/svg'>
           <path
@@ -241,7 +265,76 @@ export const CLCheckbox: React.FC<{
           />
         </svg>
       </div>
-      <label className={labelClassName || Style.checkBoxlabel}>{label}</label>
+    </div>
+  )
+}
+
+export const CLCheckbox: React.FC<{
+  checked: boolean
+  setChecked: React.Dispatch<boolean>
+  label: string
+  labelClassName?: string
+  checkBoxClassName?: string
+}> = ({ checked, setChecked, label, labelClassName, checkBoxClassName }) => {
+  usePseudoEl('lassui-CLCheckbox', [
+    '.lassui-CLCheckbox > svg {display: none;}',
+    `.lassui-CLCheckbox[data-checked="true"] {background-color: ${CSS_VARS['primary-500']};border: none;border-radius: 4px;width: 16px;height: 16px;display: flex;align-items: center;justify-content: center;}`,
+    '.lassui-CLCheckbox[data-checked="true"] > svg {display: block;}',
+  ])
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        width: '100%',
+        margin: 'auto',
+        textAlign: 'center',
+      }}
+    >
+      <div
+        onClick={() => setChecked(!checked)}
+        className={clx(
+          'lassui-CLCheckbox',
+          checkBoxClassName,
+          `${checked ? 'data-checked="true"' : ''}`,
+        )}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          marginTop: '8px',
+          marginBottom: '8px',
+          borderRadius: '4px',
+          width: '16px',
+          height: '16px',
+          border: `1px solid ${CSS_VARS['white-90']}`,
+          cursor: 'pointer',
+        }}
+        data-checked={checked}
+      >
+        <svg width='9' height='6' viewBox='0 0 11 8' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <path
+            fillRule='evenodd'
+            clipRule='evenodd'
+            d='M4.65741 7.00019C4.56141 7.00019 4.46541 6.96344 4.39191 6.89069L1.39191 3.89069C1.24566 3.74369 1.24566 3.50669 1.39191 3.35969C1.53891 3.21344 1.77591 3.21344 1.92291 3.35969L4.65741 6.09494L9.64191 1.10969C9.78891 0.963438 10.0259 0.963438 10.1729 1.10969C10.3192 1.25669 10.3192 1.49369 10.1729 1.64069L4.92291 6.89069C4.84941 6.96344 4.75341 7.00019 4.65741 7.00019Z'
+            fill='white'
+            stroke='white'
+          />
+        </svg>
+      </div>
+      <label
+        className={labelClassName}
+        style={{
+          fontSize: '12px',
+          lineHeight: '12px',
+          fontWeight: '400',
+          color: CSS_VARS['white-90'],
+        }}
+      >
+        {label}
+      </label>
     </div>
   )
 }
@@ -251,40 +344,19 @@ export const CRadio: React.FC<{
   setSelected: () => void
   className?: string
 }> = ({ selected, setSelected, className }) => {
+  usePseudoEl('lassui-CRadio', [
+    `.lassui-Cradio[type="radio"] {appearance: none;-webkit-appearance: none;background-color: #fff;font: inherit;width: 1.6rem;height: 1.6rem;border: 0.15rem solid ${CSS_VARS['white-90']};border-radius: 50%;cursor: pointer;margin: 0;display: grid;place-content: center;transition: 500ms transform ease-in-out;}`,
+    '.lassui-Cradio[type="radio"]::before {content: "";width: 0.6rem;height: 0.6rem;border-radius: 50%;transform: scale(0);transition: 240ms transform ease-in-out;box-shadow: inset 0.6rem 0.6rem #fff;cursor: pointer;}',
+    '.lassui-Cradio[type="radio"]:checked::before {transform: scale(1);}',
+    `.lassui-Cradio[type="radio"]:checked {background-color: ${CSS_VARS['primary-500']};border: 0.15rem solid ${CSS_VARS['white-90']};}`,
+  ])
   return (
     <input
       type='radio'
       checked={selected}
       onChange={(e) => setSelected()}
-      className={clx(Style.radio, className, `${selected ? Style.selected : ''}`)}
+      className={clx('lassui-Cradio', className)}
     />
-  )
-}
-
-export const CLRadio: React.FC<{
-  selected: boolean
-  setSelected: () => void
-  label: string
-  labelClassName?: string
-}> = ({ selected, setSelected, label, labelClassName }) => {
-  return (
-    <div className={Style.radioContainer}>
-      <CRadio selected={selected} setSelected={setSelected} />
-      <label onClick={() => setSelected()} className={labelClassName || Style.radioLabel}>
-        {label}
-      </label>
-    </div>
-  )
-}
-
-export const CTextFilled: React.FC<{
-  value: string
-  ref?: ClassAttributes<HTMLDivElement>['ref']
-}> = ({ value, ref }) => {
-  return (
-    <div className={Style.textFilled} ref={ref}>
-      <p>{value}</p>
-    </div>
   )
 }
 
@@ -309,14 +381,24 @@ export const CTextFilter: React.FC<TextFilterProps> = ({
   type,
   onClear,
 }) => {
+  usePseudoEl('lassui-CTextFilter', [
+    '.lassui-textFilter>svg {position: absolute;right: 8px;top: 13px;cursor: pointer;}',
+  ])
   return (
-    <div className={Style.TextFilter}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+      }}
+      className='lassui-textFilter'
+    >
       <CText
         type={type}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={Style.textInput + ' ' + className}
+        className={className}
         disabled={disabled}
         id={id}
         maxLength={maxLength}
@@ -329,303 +411,6 @@ export const CTextFilter: React.FC<TextFilterProps> = ({
   )
 }
 
-type SelectProps = {
-  SelectConfig: {
-    options: Array<{
-      [key: string]: any
-    }>
-    nameKey: string
-    optionValueKey: string
-  }
-  setCurrentSelected: (value: string) => void
-  defaultValue?: string
-  label?: string
-  filled?: boolean
-}
-
-export const CLSelectString2: React.FC<SelectProps & { color?: CSS_VARS_OPTIONS }> = ({
-  SelectConfig,
-  setCurrentSelected,
-  defaultValue,
-  label,
-  filled,
-  color,
-}) => {
-  const [selectedValue, setSelectedValue] = useState<string>(defaultValue || 'Selecione')
-  const { isTarget, ref, setIsTarget } = useTarget(false)
-  return (
-    <FlexRow
-      verticalAlign='center'
-      horizontalAlign='flex-start'
-      gap='4px'
-      margin='0'
-      width='fit-content'
-    >
-      <Text
-        className={Style.dropdownLabel}
-        fontSize='14px'
-        fontWeight='400'
-        color={color || 'neutral-300'}
-      >
-        {label}
-      </Text>
-      <FlexRow margin='auto' horizontalAlign='center' position='relative'>
-        <FlexRow onClick={() => setIsTarget(!isTarget)} verticalAlign='center'>
-          <Text fontSize='14px' width='fit-content' color={color || 'neutral-300'}>
-            {selectedValue}
-          </Text>
-          <AngleUpIcon toggle={!isTarget} />
-        </FlexRow>
-        <HideComponent visible={isTarget}>
-          <div className={Style.dropdownItems} ref={ref}>
-            {filled && <p>Selecione</p>}
-
-            {SelectConfig.options.map((element) => {
-              return (
-                <Text
-                  key={`${element[SelectConfig.nameKey]}${element[SelectConfig.optionValueKey]}`}
-                  onClick={() => {
-                    setSelectedValue(element[SelectConfig.optionValueKey])
-                    setCurrentSelected(element[SelectConfig.optionValueKey])
-                    setIsTarget(false)
-                  }}
-                  fontSize='14px'
-                  fontWeight='400'
-                  color='neutral-300'
-                  className={Style.dropdownItem}
-                  textAlign='left'
-                >
-                  {element[SelectConfig.nameKey]}
-                </Text>
-              )
-            })}
-          </div>
-        </HideComponent>
-      </FlexRow>
-    </FlexRow>
-  )
-}
-
-export const CLSelectString3: React.FC<SelectProps> = ({
-  SelectConfig,
-  setCurrentSelected,
-  defaultValue,
-  label,
-  filled,
-}) => {
-  const [selectedValue, setSelectedValue] = useState<string>(defaultValue || 'Selecione')
-  const { isTarget, ref, setIsTarget } = useTarget(false)
-  return (
-    <FlexRow
-      verticalAlign='center'
-      horizontalAlign='flex-start'
-      gap='4px'
-      margin='0'
-      width='fit-content'
-    >
-      {label && (
-        <Text className={Style.dropdownLabel} fontSize='14px' fontWeight='400' color='neutral-300'>
-          {label}
-        </Text>
-      )}
-      <FlexRow margin='auto' horizontalAlign='center' position='relative'>
-        <FlexRow onClick={() => setIsTarget(!isTarget)} verticalAlign='center'>
-          <Text fontSize='14px' width='fit-content'>
-            {selectedValue}
-          </Text>
-          <AngleUpIcon toggle={!isTarget} />
-        </FlexRow>
-        <HideComponent visible={isTarget}>
-          <div className={Style.dropdownItems} ref={ref}>
-            {filled && <p>Selecione</p>}
-
-            {SelectConfig.options.map((element) => {
-              return (
-                <Text
-                  key={`${element[SelectConfig.nameKey]}${element[SelectConfig.optionValueKey]}`}
-                  onClick={() => {
-                    setSelectedValue(element[SelectConfig.nameKey])
-                    setCurrentSelected(element[SelectConfig.optionValueKey])
-                    setIsTarget(false)
-                  }}
-                  fontSize='14px'
-                  fontWeight='400'
-                  color='neutral-300'
-                  className={Style.dropdownItem}
-                  textAlign='left'
-                >
-                  {element[SelectConfig.nameKey]}
-                </Text>
-              )
-            })}
-          </div>
-        </HideComponent>
-      </FlexRow>
-    </FlexRow>
-  )
-}
-
-type SelectPropsDouble = {
-  SelectConfig: {
-    options: Array<{
-      [key: string]: any
-    }>
-    nameKey: string
-    optionValueKey: string
-    subNameKey: string
-  }
-  setCurrentSelected: (value: string) => void
-  defaultValue?: string
-  label?: string
-  filled?: boolean
-}
-
-export const CLSelectStringDouble: React.FC<SelectPropsDouble> = ({
-  SelectConfig,
-  setCurrentSelected,
-  defaultValue,
-  label,
-  filled,
-}) => {
-  const [selectedValue, setSelectedValue] = useState<string>(defaultValue || 'Selecione')
-  const { isTarget, ref, setIsTarget } = useTarget(false)
-  return (
-    <FlexRow
-      verticalAlign='center'
-      horizontalAlign='flex-start'
-      gap='4px'
-      margin='0'
-      width='fit-content'
-    >
-      <Text className={Style.dropdownLabel} fontSize='14px' fontWeight='400' color='neutral-300'>
-        {label}
-      </Text>
-      <FlexRow margin='auto' horizontalAlign='center' position='relative'>
-        <FlexRow onClick={() => setIsTarget(!isTarget)} verticalAlign='center'>
-          <Text fontSize='14px' width='fit-content'>
-            {selectedValue}
-          </Text>
-          <AngleUpIcon toggle={!isTarget} />
-        </FlexRow>
-        <HideComponent visible={isTarget}>
-          <div className={Style.dropdownItems} ref={ref}>
-            {filled && <p>Selecione</p>}
-
-            {SelectConfig.options.map((element) => {
-              return (
-                <Text
-                  key={`${element[SelectConfig.nameKey]}${element[SelectConfig.optionValueKey]}`}
-                  onClick={() => {
-                    setSelectedValue(element[SelectConfig.optionValueKey])
-                    setCurrentSelected(element[SelectConfig.optionValueKey])
-                    setIsTarget(false)
-                  }}
-                  fontSize='14px'
-                  fontWeight='400'
-                  color='neutral-300'
-                  className={Style.dropdownItem}
-                  textAlign='left'
-                >
-                  {element[SelectConfig.nameKey]} <br />
-                  <span
-                    style={{
-                      fontSize: '12px',
-                      color: '#8A8A8A',
-                    }}
-                  >
-                    {element[SelectConfig.subNameKey]}
-                  </span>
-                </Text>
-              )
-            })}
-          </div>
-        </HideComponent>
-      </FlexRow>
-    </FlexRow>
-  )
-}
-
-type SelectPropsDoubleFilter = {
-  SelectConfig: {
-    options: Array<{
-      [key: string]: any
-    }>
-    nameKey: string
-    optionValueKey: string
-    subNameKey: string
-  }
-  setCurrentSelected: (value: string) => void
-  query: string
-  setQuery: React.Dispatch<string>
-  label?: string
-  filled?: boolean
-}
-
-export const CLSelectStringDoubleFilter: React.FC<SelectPropsDoubleFilter> = ({
-  SelectConfig,
-  setCurrentSelected,
-  label,
-  filled,
-  query,
-  setQuery,
-}) => {
-  const { isTarget, ref, setIsTarget } = useTarget(false)
-  return (
-    <FlexRow verticalAlign='center' horizontalAlign='flex-start' gap='4px' margin='0' width='200px'>
-      {label && (
-        <Text className={Style.dropdownLabel} fontSize='14px' fontWeight='400' color='neutral-300'>
-          {label}
-        </Text>
-      )}
-      <FlexRow margin='auto' horizontalAlign='center' position='relative'>
-        <FlexRow verticalAlign='center'>
-          <CText
-            placeholder='Nome ou Cpf...'
-            value={query}
-            onChange={(e) => {
-              setQuery(e.currentTarget.value)
-            }}
-          />
-
-          <AngleUpIcon toggle={!isTarget} onClick={() => setIsTarget(!isTarget)} />
-        </FlexRow>
-        {/* <HideComponent visible={isTarget}>
-          <div className={Style.dropdownItems} ref={ref}>
-            {filled && <p>Selecione</p>}
-
-            {SelectConfig.options.map((element) => {
-              return (
-                <CommonText
-                  key={`${element[SelectConfig.nameKey]}${element[SelectConfig.optionValueKey]}`}
-                  onClick={() => {
-                    setCurrentSelected(element[SelectConfig.optionValueKey])
-                    setQuery(element[SelectConfig.nameKey])
-                    setIsTarget(false)
-                  }}
-                  fontSize='14px'
-                  fontWeight='400'
-                  color='#343741'
-                  className={Style.dropdownItem}
-                  textAlign='left'
-                >
-                  {element[SelectConfig.nameKey]} <br />
-                  <span
-                    style={{
-                      fontSize: '12px',
-                      color: '#8A8A8A',
-                    }}
-                  >
-                    {element[SelectConfig.subNameKey]}
-                  </span>
-                </CommonText>
-              )
-            })}
-          </div>
-        </HideComponent> */}
-      </FlexRow>
-    </FlexRow>
-  )
-}
 type FalseTextProps = {
   text: string
   className?: string
@@ -637,9 +422,22 @@ export const CFalseText: React.FC<FalseTextProps> = ({ text, className, onClick 
     <p
       style={{
         cursor: onClick ? 'pointer' : 'default',
+        widows: '100%',
+        height: '50px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        fontSize: '16px',
+        fontWeight: '500',
+        borderRadius: '8px',
+        margin: 'auto',
+        paddingLeft: '30px',
+        paddingRight: '30px',
+        backgroundColor: CSS_VARS['neutral-500'],
+        color: CSS_VARS['white-90'],
       }}
       onClick={onClick}
-      className={clx(Style.falseText, className)}
+      className={clx(className)}
     >
       {text}
     </p>

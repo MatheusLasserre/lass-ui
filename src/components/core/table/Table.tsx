@@ -1,8 +1,8 @@
 import { FlexColumn } from '../containers/Utils'
-import Style from './Table.module.css'
 import { CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
-import { Prettify } from '../../../types/utils'
+import type { Prettify } from '../../../types/utils.d.ts'
 import React, { useEffect, useState } from 'react'
+import { usePseudoEl } from '../../../hooks/usePseudoEl'
 
 type Action = Prettify<{ dataKey: string; action: (data: any) => void }>
 type Format = Prettify<{ dataKey: string; format: (data: any) => string | React.ReactNode }>
@@ -37,39 +37,27 @@ export const CTable: React.FC<CTableProps> = ({
   rowHeight = '35px',
   nextPage,
 }) => {
-  const textColor = color || 'neutral-100'
-  const linkColorText = linkColor || ('neutral-100' satisfies CSS_VARS_OPTIONS)
+  const textColor = color || 'white-90'
+  const linkColorText = linkColor || ('secondary-blue-200' satisfies CSS_VARS_OPTIONS)
   const dataKeys = header.map((item) => item.dataKey)
   const headerLabels = header.map((item) => item.label)
-  const dataKeysLength = dataKeys.length
-  useEffect(() => {
-    if (document) {
-      addBeforeContent()
-    }
-    return () => {
-      if (document) {
-        removeBeforeContent()
-      }
-    }
-  }, [])
-  const addBeforeContent = () => {
-    const styleEl = document.createElement('style')
-    styleEl.id = 'table-before-content'
-    document.head.appendChild(styleEl)
-    const styleSheet = styleEl.sheet
-    for (let i = 0; i < dataKeysLength; i++) {
-      styleSheet?.insertRule(
-        `.${Style.td}:nth-child(${i + 1})::before {content: '${headerLabels[i]}';}`,
-        0,
-      )
-    }
-  }
-  const removeBeforeContent = () => {
-    const styleEl = document.getElementById('table-before-content')
-    if (styleEl) {
-      styleEl.remove()
-    }
-  }
+  const beforeRulesArray = dataKeys.map((item, index) => `.lassui-td:nth-child(${index + 1})::before {content: '${headerLabels[index]}';}`)
+  usePseudoEl('lassui-table', [
+    "@media print and (max-width: 5in) {.lassui-table {page-break-inside: auto;}.lassui-tr {page-break-inside: avoid;}}",
+    "@media print {.lassui-table {page-break-inside: avoid;}.lassui-th {color: #000;background-color: #fff;border-bottom: 1pt solid #000;}.lassui-tr {border-top: 1pt solid #000;}}",
+
+    `@media screen and (max-width: 1100px), print and (max-width: 5in) {.lassui-tbody {width: 100%;display: block;}.lassui-table,.lassui-tr,.lassui-td {display: block;}.lassui-tr {padding: 0.7em 2vw;width: 100%;}.lassui-th, .lassui-thead {display: none;}.lassui-td::before {display: inline;font-weight: bold;hyphens: manual;word-break: break-word;}.lassui-td {display: grid;grid-template-columns: 5em auto;grid-gap: 1em 0.5em;width: 100%;}.lassui-td::before {display: inline;font-size: normal;font-weight: bold;color: ${CSS_VARS['white-90']};}.lassui-td > svg,.lassui-th > svg {margin-left: 0px;}}`,
+
+    `.lassui-tr:hover{background-color: ${CSS_VARS['neutral-600']};}`,
+
+    ...beforeRulesArray,
+
+    `.lassui-tr:last-of-type{border-bottom: none;}`,
+
+    ".lassui-td::before {display: none;}",
+    ".lassui-td > svg,.lassui-th > svg {margin-left: 14px;}",
+    `.lassui-td > svg:hover > path,.lassui-th > svg:hover > path {fill: ${CSS_VARS['secondary-orange-400']}; }`,
+  ])
 
   const [sortKey, setSortKey] = useState<sortObject | undefined>(undefined)
   const handleSetSort = (value: string) => {
@@ -105,8 +93,13 @@ export const CTable: React.FC<CTableProps> = ({
           maxWidth: '100%',
           borderCollapse: 'collapse',
           borderSpacing: '0',
+          backgroundColor: CSS_VARS['neutral-700'],
+          borderRadius: '8px',
+          marginTop: '10px',
+          overflowY: 'visible',
+          overflowX: 'auto',
         }}
-        className={Style.table}
+        className="lassui-table"
         tabIndex={0}
       >
         {/* <FlexColumn gap='0' margin='10px 0 auto 0' width='fit-content' maxWidth={maxWidth}></FlexColumn> */}
@@ -140,8 +133,12 @@ type TableHeaderProps = {
 }
 const TableHeader: React.FC<TableHeaderProps> = ({ color, header, rowHeight, setSort }) => {
   return (
-    // <FlexRow gap='0' height={rowHeight} className={Style.dividerBorder} verticalAlign='center'>
-    <thead className={Style.thead}>
+    <thead className="lassui-thead"
+    style={{
+      fontSize: '14px',
+      lineHeight: '18px',
+      fontWeight: '400',
+    }}>
       <tr>
         {header.map((item) => (
           <TableHeaderCell
@@ -171,9 +168,13 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ label, color, setSort
     // <FlexRow width={width} horizontalAlign='flex-start' verticalAlign='center'>
     // <CommonText fontSize='12px' lineHeight='18px' fontWeight='600' color={color} textAlign='left'>
     <th
-      className={Style.th}
+      className="lassui-th"
       style={{
         color: CSS_VARS[color],
+        verticalAlign: 'bottom',
+        backgroundColor: CSS_VARS['neutral-700'],
+        textAlign: 'left',
+        padding: '1rem 1rem 1rem 1rem',
       }}
       onClick={() => setSort(dataKey)}
     >
@@ -206,7 +207,11 @@ const TableBody: React.FC<TableBodyProps> = ({
 }) => {
   return (
     // <FlexColumn gap='0' margin='10px 0 auto 0' width='fit-content'>
-    <tbody className={Style.tbody}>
+    <tbody className="lassui-tbody" style={{
+      fontSize: '14px',
+      lineHeight: '18px',
+      fontWeight: '400',
+    }}>
       {data
         .sort((a, b) => {
           if (!sortKey || typeof a[sortKey.dataKey] !== typeof b[sortKey.dataKey]) return 0
@@ -259,8 +264,12 @@ const TableBodyRow: React.FC<TableBodyRowProps> = ({
   rowHeight,
 }) => {
   return (
-    // <FlexRow gap='0' height={rowHeight} className={Style.dividerBorder} verticalAlign='center'>
-    <tr className={Style.tr}>
+    <tr className="lassui-tr"
+      style={{
+        backgroundColor: CSS_VARS['neutral-500'],
+        borderBottom: `1px solid ${CSS_VARS['white-20']}`,
+      }}
+    >
       {dataKeys.map((key) => {
         const actionItem = action.find((item) => item.dataKey === key)
         const formatItem = format.find((item) => item.dataKey === key)
@@ -278,7 +287,6 @@ const TableBodyRow: React.FC<TableBodyRowProps> = ({
         )
       })}
     </tr>
-    // </FlexRow>
   )
 }
 
@@ -304,8 +312,12 @@ const TableBodyCell: React.FC<TableBodyCellProps> = ({
           color: CSS_VARS[action ? linkColor : color],
           cursor: action ? 'pointer' : 'default',
           textDecoration: action ? 'underline' : 'none',
+          verticalAlign: 'middle',
+          textAlign: 'left',
+          padding: '1rem 1rem 1rem 1rem',
         }}
-        className={Style.td}
+        className="lassui-td"
+
         onClick={() => action && action(value)}
       >
         {format ? format(value) : assertDate.toLocaleDateString()}
@@ -318,8 +330,11 @@ const TableBodyCell: React.FC<TableBodyCellProps> = ({
         color: CSS_VARS[action ? linkColor : color],
         cursor: action ? 'pointer' : 'default',
         textDecoration: action ? 'underline' : 'none',
+        verticalAlign: 'middle',
+        textAlign: 'left',
+        padding: '1rem 1rem 1rem 1rem',
       }}
-      className={Style.td}
+      className="lassui-td"
       onClick={() => action && action(value)}
     >
       {/* @ts-ignore */}

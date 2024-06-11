@@ -1,9 +1,9 @@
-import { forwardRef, useEffect } from 'react'
-import Style from './Modal.module.css'
+import { forwardRef } from 'react'
 import { FlexColumn, IconBackgroundNormalizer } from '../containers/Utils'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
-import { CSS_VARS_OPTIONS } from '~/utils/cssVars'
+import { CSS_FONTS, CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
 import { clx } from '../../../utils/style'
+import { usePseudoEl } from '../../../hooks/usePseudoEl'
 
 export const ModalHelper: React.FC<{
   children: React.ReactNode
@@ -41,67 +41,36 @@ type ContextMenuProps = {
   y: number
 }
 
-export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
-  ({ children, visible, close, x, y }, ref) => {
-    useEffect(() => {
-      if (document) {
-        addHoverStyle()
-      }
-      return () => {
-        if (document) {
-          removeHoverStyle()
-        }
-      }
-    }, [])
-    const addHoverStyle = () => {
-      const styleEl = document.createElement('style')
-      styleEl.id = 'lassui-contextMenuItem-hover'
-      document.head.appendChild(styleEl)
-      const styleSheet = styleEl.sheet
-      styleSheet?.insertRule(
-        `.lassui-contextMenuItem:hover {
-            background-color: #017D73B2;
-          }
-          `,
-        0,
-      )
-      styleSheet?.insertRule(
-        `.lassui-contextMenuItem:hover > p {
-          color: #fff !important;
-        }`,
-        0,
-      )
-    }
-    const removeHoverStyle = () => {
-      const styleEl = document.getElementById('lassui-contextMenuItem-hover')
-      if (styleEl) {
-        styleEl.remove()
-      }
-    }
-    visible ? disableBodyScroll(document.body) : enableBodyScroll(document.body)
-    if (!visible) return null
-    const abc = <p></p>
-    return (
-      <FlexColumn
-        ref={ref}
-        styles={{
-          top: y + 'px',
-          left: x + 'px',
-          padding: '4px 0',
-          width: 'fit-content',
-          position: 'fixed',
-          zIndex: '100',
-          backgroundColor: '#fff',
-          borderRadius: '8px',
-          boxShadow: '0px 0px 10px 0px rgba(255, 255, 255, 0.05)',
-          border: '2px solid #DFDFDF',
-        }}
-      >
-        {children}
-      </FlexColumn>
-    )
-  },
-)
+export const ContextMenu: React.ForwardRefExoticComponent<
+  ContextMenuProps & React.RefAttributes<HTMLDivElement>
+> = forwardRef<HTMLDivElement, ContextMenuProps>(({ children, visible, close, x, y }, ref) => {
+  usePseudoEl('lassui-contextMenuItem-hover', [
+    `.lassui-contextMenuItem:hover {background-color: ${CSS_VARS['ctxMenuBg']};}`,
+    `.lassui-contextMenuItem:hover > p {color: ${CSS_VARS['ctxMenuColor']} !important;}`,
+  ])
+  visible ? disableBodyScroll(document.body) : enableBodyScroll(document.body)
+  if (!visible) return null
+  const abc = <p></p>
+  return (
+    <FlexColumn
+      ref={ref}
+      styles={{
+        top: y + 'px',
+        left: x + 'px',
+        padding: '4px 0',
+        width: 'fit-content',
+        position: 'fixed',
+        zIndex: '100',
+        backgroundColor: CSS_VARS['ctxMenuBg'],
+        borderRadius: '8px',
+        boxShadow: '0px 0px 10px 0px rgba(255, 255, 255, 0.05)',
+        border: `px solid ${CSS_VARS['ctxMenuBorder']}`,
+      }}
+    >
+      {children}
+    </FlexColumn>
+  )
+})
 
 export const ContextMenuItem: React.FC<{
   onClick: () => void
@@ -140,7 +109,7 @@ export const ContextMenuItem: React.FC<{
           lineHeight: '16px',
           color: textColor,
           fontWeight: '400',
-          fontFamily: 'Inter',
+          fontFamily: CSS_FONTS['Inter'],
           textAlign: 'left',
           margin: 0,
         }}
@@ -155,7 +124,7 @@ export const ContextMenuDivider: React.FC = () => {
   return (
     <div
       style={{
-        backgroundColor: '#DFDFDF',
+        backgroundColor: CSS_VARS['ctxMenuBorder'],
         width: '100%',
         margin: 0,
         height: 1,

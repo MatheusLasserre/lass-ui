@@ -1,5 +1,5 @@
 import React from 'react'
-import { CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
+import { CSS_FONTS, CSS_FONTS_OPTIONS, CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
 type FontFamilyOptions = 'Inter' | 'Lato' | 'Jomhuria'
 type TextProps = {
   children: React.ReactNode
@@ -20,7 +20,7 @@ type TextPropsWithSizes = TextProps & {
   maxWidth?: string
   fontWeight?: '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
   color?: CSS_VARS_OPTIONS
-  fontFamily?: FontFamilyOptions
+  fontFamily?: CSS_FONTS_OPTIONS
   link?: boolean
   lineHeight?: string
 }
@@ -36,13 +36,14 @@ export const HighLightText: React.FC<TextPropsWithSizes> = ({
   letterSpacing,
   fontWeight,
   color,
+  fontFamily,
   link
 }) => {
   return (
     <span
       style={{
         fontWeight: fontWeight || '700',
-        fontFamily: 'Inter',
+        fontFamily: fontFamily ? CSS_FONTS[fontFamily] : 'unset',
         fontSize: fontSize || '2rem',
         letterSpacing: letterSpacing || '-1.12px',
         marginTop: marginTop || '4px',
@@ -83,7 +84,7 @@ export const Text: React.FC<TextPropsWithSizes & OnClick> = ({
     <p
       style={{
         fontWeight: fontWeight || '400',
-        fontFamily: fontFamily || 'Inter',
+        fontFamily: fontFamily ? CSS_FONTS[fontFamily] : 'unset',
         fontSize: fontSize || '1.6rem',
         lineHeight: lineHeight || '1.9rem',
         marginTop: marginTop || '4px',

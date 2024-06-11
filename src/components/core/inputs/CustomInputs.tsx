@@ -1,16 +1,16 @@
-import {useState } from 'react'
+import { useEffect, useState } from 'react'
 import useTarget from '../../../hooks/useTarget'
 import {
   FormatNumberMask,
   NumberStringToNumber,
-  handleValueInputChange,
   padWithLeadingZeros,
 } from '../../../utils/formating/numbers'
-import Style from './CustomInputs.module.css'
 import { CFalseText, CText } from '../inputs/Inputs'
 import { AngleUpIcon } from '../../assets/Icons'
 import { clx } from '../../../utils/style'
-import { Prettify } from '../../../types/utils'
+import type { Prettify } from '../../../types/utils.d.ts'
+import { usePseudoEl } from '../../../hooks/usePseudoEl'
+import { CSS_VARS } from '../../../utils/cssVars'
 
 type CurrencyInputProps = {
   currencyValue: number
@@ -21,6 +21,33 @@ type CurrencyInputProps = {
   currencySymbol?: string
 }
 
+export const InputsTest: React.FC = () => {
+  const [currencyValue, setCurrencyValue] = useState(0)
+  return (
+    <div>
+      <CLCurrencyInput
+        currencyValue={currencyValue}
+        setCurrencyValue={setCurrencyValue}
+        label='Label'
+        currencySymbol='$'
+      />
+    </div>
+  )
+}
+
+export const InputsTest2: React.FC = () => {
+  const [currencyValue2, setCurrencyValue2] = useState(0)
+  return (
+    <div>
+      <CurrencyInput
+        currencyValue={currencyValue2}
+        setCurrencyValue={setCurrencyValue2}
+        currencySymbol='RR'
+      />
+    </div>
+  )
+}
+
 export const CurrencyInput: React.FC<CurrencyInputProps> = ({
   className,
   currencyValue,
@@ -29,26 +56,38 @@ export const CurrencyInput: React.FC<CurrencyInputProps> = ({
   maxLength,
   placeholder,
 }) => {
-  const [editValueString, setEditValueString] = useState(
-    FormatNumberMask(currencyValue, currencySymbol),
-  )
+  const [editValueString, setEditValueString] = useState(FormatNumberMask(currencyValue))
   const handleEditTransferAmountChange = (value: string) => {
-    setEditValueString(handleValueInputChange(value, currencyValue))
     setCurrencyValue(NumberStringToNumber(value))
   }
+  usePseudoEl('lassui-currencyBefore', [
+    `.lassui-currencyBefore::after {content: "${currencySymbol}";display: inline;position: absolute;left: 10px;top: 16px;font-size: 16px;color: var(--white-100);font-weight: 500; text-align: right; width: 20px;}`,
+    '.lassui-currencyBeforeInput {padding-left: 34px !important;}',
+  ])
+
+  useEffect(() => {
+    setEditValueString(FormatNumberMask(currencyValue))
+  }, [currencyValue])
 
   return (
-    <CText
-      value={editValueString}
-      onChange={(e) => handleEditTransferAmountChange(e.currentTarget.value)}
-      required
-      type='text'
-      name='value'
-      id='value'
-      placeholder={placeholder}
-      maxLength={maxLength}
-      className={clx(className, Style.currencyBeforeInput)}
-    />
+    <div
+      style={{
+        position: 'relative',
+      }}
+      className='lassui-currencyBefore'
+    >
+      <CText
+        value={editValueString}
+        onChange={(e) => handleEditTransferAmountChange(e.currentTarget.value)}
+        required
+        type='text'
+        name='value'
+        id='value'
+        placeholder={placeholder}
+        maxLength={maxLength}
+        className={clx(className, 'lassui-currencyBeforeInput')}
+      />
+    </div>
   )
 }
 
@@ -74,7 +113,18 @@ export const CLCurrencyInput: React.FC<CLCurrencyInputProps> = ({
   currencySymbol,
 }) => {
   return (
-    <label className={clx(labelClassName || Style.label, Style.currencyBefore)}>
+    <label
+      className={clx(labelClassName)}
+      style={{
+        fontSize: '12px',
+        fontWeight: '600',
+        color: CSS_VARS['white-90'],
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+        width: '100%',
+      }}
+    >
       {label}
       <CurrencyInput
         currencyValue={currencyValue}
@@ -103,12 +153,25 @@ type SelectIntProps = Prettify<{
   selectedValue?: number | null
 }>
 
-export const SelectIntCustom: React.FC<
-  SelectIntProps
-> = ({ SelectConfig, setCurrentSelected, defaultValue, selectedValue }) => {
+export const SelectIntCustom: React.FC<SelectIntProps> = ({
+  SelectConfig,
+  setCurrentSelected,
+  defaultValue,
+  selectedValue,
+}) => {
+  usePseudoEl('lassui-select-from-range', [
+    '.lassui-SICItem:last-child {border-bottom: none;}',
+    '.lassui-SICItem:hover {background-color: var(--neutral-100);}',
+  ])
   const { isTarget, ref, setIsTarget } = useTarget(false)
   return (
-    <div className={Style.contentWrapper} ref={ref}>
+    <div
+      ref={ref}
+      style={{
+        width: '100%',
+        position: 'relative',
+      }}
+    >
       <CFalseText
         text={
           selectedValue
@@ -129,10 +192,28 @@ export const SelectIntCustom: React.FC<
           transform: 'translateY(-50%)',
         }}
       >
-        <AngleUpIcon color={'white-90'} toggle={!isTarget} onClick={() => setIsTarget(!isTarget)} />
+        <AngleUpIcon
+          color={'white-90'}
+          toggle={!isTarget}
+          onClick={() => setIsTarget(!isTarget)}
+        />
       </div>
       {isTarget && (
-        <div className={Style.SICOptions}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '50px',
+            left: '0',
+            width: '100%',
+            backgroundColor: 'var(--neutral-100)',
+            border: '1px solid var(--white-100)',
+            borderRadius: '8px',
+            zIndex: '999',
+            maxHeight: '300px',
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+          }}
+        >
           {SelectConfig.options.map((element, index) => {
             return (
               <div
@@ -141,9 +222,31 @@ export const SelectIntCustom: React.FC<
                   setCurrentSelected(Number(element[SelectConfig.optionValueKey]))
                   setIsTarget(false)
                 }}
-                className={Style.SICItem}
+                className='lassui-SICItem'
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  padding: '8px',
+                  cursor: 'pointer',
+                  width: 'calc(100% + 50px)',
+                  transition: 'background-color 0.05s ease-in-out',
+                  borderBottom: '1px solid var(--white-100)',
+                }}
               >
-                <p className={Style.SICItemLabel}>{element[SelectConfig.nameKey]}</p>
+                <p
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    margin: '0',
+                    padding: '4px',
+                    cursor: 'pointer',
+                    color: 'var(--white-100)',
+                  }}
+                >
+                  {element[SelectConfig.nameKey]}
+                </p>
               </div>
             )
           })}
@@ -165,8 +268,18 @@ export const SelectFromRange: React.FC<SelectFromRangeProps> = ({
   leadingZeros,
 }) => {
   const { isTarget, ref, setIsTarget } = useTarget(false)
+  usePseudoEl('lassui-select-from-range', [
+    '.lassui-SICItem:last-child {border-bottom: none;}',
+    '.lassui-SICItem:hover {background-color: var(--neutral-100);}',
+  ])
   return (
-    <div className={Style.contentWrapper} ref={ref}>
+    <div
+      ref={ref}
+      style={{
+        width: '100%',
+        position: 'relative',
+      }}
+    >
       <CFalseText
         text={typeof selectedValue === 'number' ? selectedValue.toString() : 'Selecione'}
         onClick={() => setIsTarget(!isTarget)}
@@ -179,10 +292,28 @@ export const SelectFromRange: React.FC<SelectFromRangeProps> = ({
           transform: 'translateY(-50%)',
         }}
       >
-        <AngleUpIcon color={'white-90'} toggle={!isTarget} onClick={() => setIsTarget(!isTarget)} />
+        <AngleUpIcon
+          color={'white-90'}
+          toggle={!isTarget}
+          onClick={() => setIsTarget(!isTarget)}
+        />
       </div>
       {isTarget && (
-        <div className={Style.SICOptions}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '50px',
+            left: '0',
+            width: '100%',
+            backgroundColor: 'var(--neutral-100)',
+            border: '1px solid var(--white-100)',
+            borderRadius: '8px',
+            zIndex: '999',
+            maxHeight: '300px',
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+          }}
+        >
           {Array.from({ length: range[1] - range[0] + 1 }, (_, i) => i + range[0]).map(
             (element) => {
               return (
@@ -192,9 +323,29 @@ export const SelectFromRange: React.FC<SelectFromRangeProps> = ({
                     setCurrentSelected(element)
                     setIsTarget(false)
                   }}
-                  className={Style.SICItem}
+                  className='lassui-SICItem'
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    padding: '8px',
+                    cursor: 'pointer',
+                    width: 'calc(100% + 50px)',
+                    transition: 'background-color 0.05s ease-in-out',
+                    borderBottom: '1px solid var(--white-100)',
+                  }}
                 >
-                  <p className={Style.SICItemLabel}>
+                  <p
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      margin: '0',
+                      padding: '4px',
+                      cursor: 'pointer',
+                      color: 'var(--white-100)',
+                    }}
+                  >
                     {padWithLeadingZeros(element, leadingZeros || element.toString().length)}
                   </p>
                 </div>
@@ -203,99 +354,6 @@ export const SelectFromRange: React.FC<SelectFromRangeProps> = ({
           )}
         </div>
       )}
-    </div>
-  )
-}
-
-type SelectIntCardProps = Prettify<{
-  SelectConfig: SelectConfig
-  setCurrentSelected: React.Dispatch<number[]>
-  defaultValue?: number[]
-  currentSelected: number[]
-}>
-
-export const SelectIntCards: React.FC<SelectIntCardProps> = ({
-  SelectConfig,
-  setCurrentSelected,
-  currentSelected,
-  defaultValue,
-}) => {
-  return (
-    <div className={Style.cardsWrapper}>
-      <div className={Style.contentWrapper}>
-        <select
-          onChange={(e) => {
-            setCurrentSelected([...currentSelected, Number(e.currentTarget.value)])
-            e.currentTarget.value = '0'
-          }}
-          defaultValue={0}
-        >
-          <option value={0} disabled>
-            Selecione
-          </option>
-          {SelectConfig.options
-            .filter((element) => {
-              if (currentSelected.includes(Number(element[SelectConfig.optionValueKey]))) {
-                return false
-              }
-              return true
-            })
-            .map((element) => {
-              return (
-                <option
-                  value={Number(element[SelectConfig.optionValueKey])}
-                  key={`${element[SelectConfig.nameKey]}${element[SelectConfig.optionValueKey]}`}
-                >
-                  {element[SelectConfig.nameKey]}
-                </option>
-              )
-            })}
-        </select>
-        <div className={Style.svgIcon}>
-          <svg width='20px' height='20px' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'>
-            <path d='M10 1L5 8h10l-5-7zm0 18l5-7H5l5 7z' />
-          </svg>
-        </div>
-      </div>
-      <div className={Style.selectedCards}>
-        {currentSelected.map((element) => {
-          const selectedElement = SelectConfig.options.find(
-            (option) => Number(option[SelectConfig.optionValueKey]) === element,
-          )
-          if (!selectedElement) {
-            return null
-          }
-          return (
-            <div
-              className={Style.selectedCard}
-              key={`${selectedElement[SelectConfig.nameKey]}${
-                selectedElement[SelectConfig.optionValueKey]
-              }`}
-            >
-              <div className={Style.selectedCardName}>{selectedElement[SelectConfig.nameKey]}</div>
-              <div
-                className={Style.selectedCardRemove}
-                onClick={() => {
-                  setCurrentSelected(currentSelected.filter((id) => id !== element))
-                }}
-              >
-                <svg
-                  width='12px'
-                  height='12px'
-                  viewBox='0 0 24 24'
-                  fill='none'
-                  xmlns='http://www.w3.org/2000/svg'
-                >
-                  <path
-                    d='M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z'
-                    fill='#0F0F0F'
-                  />
-                </svg>
-              </div>
-            </div>
-          )
-        })}
-      </div>
     </div>
   )
 }
@@ -325,21 +383,72 @@ export const SelectIntFromQuery: React.FC<SelectIntFromQueryProps> = ({
   nameKey,
   infoKey,
 }) => {
+  usePseudoEl('lassui-select-int-from-query', [
+    '.lassui-queryItem:hover{background-color: var(--primary-100);}',
+  ])
   const { isTarget, ref, setIsTarget } = useTarget(false)
   return (
-    <div className={Style.queryInputContainer} ref={ref}>
-      <div className={Style.queryInputSearch}>
-        <p>{label}</p>
+    <div
+      ref={ref}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        position: 'relative',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '4px',
+        }}
+      >
+        <p
+          style={{
+            fontSize: '14px',
+            fontWeight: '600',
+            margin: '0',
+          }}
+        >
+          {label}
+        </p>
         <input
           type='text'
           placeholder='Buscar por email...'
           value={query}
           onChange={(e) => setQuery(e.currentTarget.value)}
           onClick={() => setIsTarget(true)}
+          style={{
+            height: '30px',
+            border: '1px solid var(--neutral-100)',
+            backgroundColor: 'var(--white-100)',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+            borderRadius: '8px',
+            fontSize: '14px',
+          }}
         />
       </div>
       {isTarget && (
-        <div className={Style.queryResults}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '30px',
+            left: '0',
+            width: '100%',
+            backgroundColor: 'var(--neutral-100)',
+            border: '1px solid var(--white-100)',
+            borderRadius: '8px',
+            zIndex: '999',
+            maxHeight: '300px',
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+          }}
+        >
           {data &&
             data.length > 0 &&
             data.map((element) => {
@@ -347,11 +456,38 @@ export const SelectIntFromQuery: React.FC<SelectIntFromQueryProps> = ({
                 <div
                   key={element[valueKey]}
                   onClick={() => setValue(Number(element[valueKey]))}
-                  className={Style.queryItem}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    padding: '4px',
+                    cursor: 'pointer',
+                    width: '100%',
+                  }}
                 >
-                  <p className={Style.queryItemLabel}>{element[nameKey]}</p>
+                  <p
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      margin: '0',
+                      padding: '4px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {element[nameKey]}
+                  </p>
                   {infoKey && element[infoKey] && (
-                    <p className={Style.queryItemInfo}>{element[infoKey]}</p>
+                    <p
+                      style={{
+                        fontSize: '10px',
+                        margin: '0',
+                        padding: '4px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {element[infoKey]}
+                    </p>
                   )}
                 </div>
               )

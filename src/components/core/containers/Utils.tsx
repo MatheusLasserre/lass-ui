@@ -1,5 +1,4 @@
 import { forwardRef, HTMLAttributes, useEffect, useState } from 'react'
-import Style from './Utils.module.css'
 import { clx } from '../../../utils/style'
 import { LoadingZero } from '../utils/Loading'
 import { CSS_VARS, CSS_VARS_OPTIONS } from '../../../utils/cssVars'
@@ -43,34 +42,36 @@ type FlexRowProps = {
   backgroundColor?: CSS_VARS_OPTIONS
   styles?: React.CSSProperties
   columnWidth?:
-    | '4'
-    | '8'
-    | '12'
-    | '16'
-    | '20'
-    | '24'
-    | '28'
-    | '32'
-    | '36'
-    | '40'
-    | '44'
-    | '48'
-    | '52'
-    | '56'
-    | '60'
-    | '64'
-    | '68'
-    | '72'
-    | '76'
-    | '80'
-    | '84'
-    | '88'
-    | '92'
-    | '96'
-    | '100'
+    | '4%'
+    | '8%'
+    | '12%'
+    | '16%'
+    | '20%'
+    | '24%'
+    | '28%'
+    | '32%'
+    | '36%'
+    | '40%'
+    | '44%'
+    | '48%'
+    | '52%'
+    | '56%'
+    | '60%'
+    | '64%'
+    | '68%'
+    | '72%'
+    | '76%'
+    | '80%'
+    | '84%'
+    | '88%'
+    | '92%'
+    | '96%'
+    | '100%'
 }
 
-export const FlexRow = forwardRef<HTMLDivElement, FlexRowProps>(
+export const FlexRow: React.ForwardRefExoticComponent<
+  FlexRowProps & React.RefAttributes<HTMLDivElement>
+> = forwardRef<HTMLDivElement, FlexRowProps>(
   (
     {
       children,
@@ -116,7 +117,7 @@ export const FlexRow = forwardRef<HTMLDivElement, FlexRowProps>(
       <div
         ref={ref}
         style={{
-          width: width || '100%',
+          width: toggleColumn ? columnWidth || '100%' : '100%',
           display: 'flex',
           flexDirection: toggleColumn ? 'column' : 'row',
           gap: gap || '4px',
@@ -139,8 +140,7 @@ export const FlexRow = forwardRef<HTMLDivElement, FlexRowProps>(
           backgroundColor: backgroundColor ? CSS_VARS[backgroundColor] : 'unset',
           ...styles,
         }}
-        data-width={toggleColumn ? columnWidth || '100' : '0'}
-        className={clx(Style.FlexRow, className)}
+        className={clx(className)}
         onClick={onClick}
         onContextMenu={onContextMenu}
       >
@@ -169,7 +169,9 @@ type FlexColumnProps = {
   backgroundColor?: CSS_VARS_OPTIONS
   onContextMenu?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
-export const FlexColumn = forwardRef<HTMLDivElement, FlexColumnProps>(
+export const FlexColumn: React.ForwardRefExoticComponent<
+  FlexColumnProps & React.RefAttributes<HTMLDivElement>
+> = forwardRef<HTMLDivElement, FlexColumnProps>(
   (
     {
       children,
@@ -277,8 +279,14 @@ export const IconNormalizer: React.FC<{
 }> = ({ color, children, width }) => {
   return (
     <div
-      className={Style.IconColorizer}
-      style={{ color: CSS_VARS[color], width: width, height: width }}
+      style={{
+        color: CSS_VARS[color],
+        width: width,
+        height: width,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       {children}
     </div>
@@ -294,12 +302,17 @@ export const IconBackgroundNormalizer: React.FC<{
 }> = ({ color, children, width, backgroundColor, padding }) => {
   return (
     <div
-      className={Style.IconBackgroundNormalizer}
       style={{
         backgroundColor: CSS_VARS[backgroundColor],
         width: width,
         height: width,
         padding: padding ? padding : '0',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        transition: 'background-color 0.1s',
+        borderRadius: '50%',
       }}
     >
       <IconNormalizer color={color} width={width}>
