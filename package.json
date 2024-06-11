@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "An opinionated UI library for React",
   "main": "src/index.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "storybook dev -p 6006",
@@ -13,7 +14,13 @@
   },
   "keywords": [
     "react",
-    "table"
+    "ui",
+    "components",
+    "library",
+    "lass",
+    "table",
+    "table-component",
+    "inputs"
   ],
   "author": "Matheus Lasserre",
   "license": "ISC",
